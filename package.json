@@ -1,7 +1,7 @@
 {
   "name": "easymd",
   "productName": "EasyMD",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful, offline-capable Markdown editor and reader with live preview, themes, LaTeX, and drag-and-drop file reading.",
   "author": "Ye Htut Win",
   "license": "MIT",
@@ -20,6 +20,22 @@
     "directories": {
       "output": "dist"
     },
+    "fileAssociations": [
+      {
+        "ext": "md",
+        "name": "Markdown Document",
+        "description": "Markdown Document",
+        "role": "Editor",
+        "icon": "build/icon.ico"
+      },
+      {
+        "ext": "markdown",
+        "name": "Markdown Document",
+        "description": "Markdown Document",
+        "role": "Editor",
+        "icon": "build/icon.ico"
+      }
+    ],
     "files": [
       "index.html",
       "app.js",
