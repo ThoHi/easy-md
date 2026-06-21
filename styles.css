@@ -1,7 +1,7 @@
 /* styles.css - EasyMD Design System */
 
 /* --- Import Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('./vendor/fonts/fonts.css');
 
 /* --- Reset & Base Styles --- */
 * {

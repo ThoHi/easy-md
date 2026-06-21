@@ -1,0 +1,48 @@
+{
+  "name": "easymd",
+  "productName": "EasyMD",
+  "version": "1.0.0",
+  "description": "A beautiful, offline-capable Markdown editor and reader with live preview, themes, LaTeX, and drag-and-drop file reading.",
+  "author": "Ye Htut Win",
+  "license": "MIT",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.yehtutwin.easymd",
+    "productName": "EasyMD",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "app.js",
+      "styles.css",
+      "electron-main.js",
+      "manifest.webmanifest",
+      "sw.js",
+      "icon.svg",
+      "icon-192.png",
+      "icon-512.png",
+      "vendor/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "EasyMD"
+    }
+  }
+}

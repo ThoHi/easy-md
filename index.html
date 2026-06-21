@@ -9,8 +9,8 @@
     <meta name="description" content="EasyMD is a beautiful, modern Markdown editor with live preview, sync-scrolling, multiple themes, LaTeX equations, and high-fidelity PDF export.">
     <meta name="theme-color" content="#0a0b10">
 
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'none'">
+    <!-- Content Security Policy (all assets bundled locally — no external origins) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'none'">
     
     <!-- PWA: manifest & icons -->
     <link rel="manifest" href="manifest.webmanifest">
@@ -23,18 +23,14 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- KaTeX Math CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVdqiG7Kjzs95dyRL4yR3OBgDR35nm4dFnh1gJDYWvSgUM5fF721AlaYcRe0UN" crossorigin="anonymous">
-    
-    <!-- Highlight.js Syntax Highlighting CSS (Base Dark) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/tokyo-night-dark.min.css" integrity="sha384-6PRNB60loRkq5oYgj0ETV33K0YsTUlab8qtfTGXhRgW5Nz1IpzS2zwj6UmlJEnyV" crossorigin="anonymous">
+    <!-- FontAwesome Icons (bundled) -->
+    <link rel="stylesheet" href="vendor/css/fontawesome.min.css">
 
-    <!-- Pre-connect for Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- KaTeX Math CSS (bundled) -->
+    <link rel="stylesheet" href="vendor/katex/katex.min.css">
+
+    <!-- Highlight.js Syntax Highlighting CSS (bundled) -->
+    <link rel="stylesheet" href="vendor/highlight/tokyo-night-dark.min.css">
 </head>
 <body>
 
@@ -264,22 +260,13 @@ $$x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$$</pre>
         </div>
     </div>
 
-    <!-- External Scripts (via CDN) -->
-    <!-- DOMPurify for HTML sanitization (XSS prevention) -->
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js" integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a" crossorigin="anonymous"></script>
-
-    <!-- Marked.js for Markdown compiling (pinned version with SRI) -->
-    <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js" integrity="sha384-odPBjvtXVM/5hOYIr3A1dB+flh0c3wAT3bSesIOqEGmyUA4JoKf/YTWy0XKOYAY7" crossorigin="anonymous"></script>
-
-    <!-- Highlight.js for Code Highlighting (npm CDN with SRI) -->
-    <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
-    
-    <!-- KaTeX Math JS & Auto-render extension -->
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-Xb44xqQ0JItyl67cMZ7YRJ6a9FspTCIdDYlCebJTyAZODhzax6kUMYt3uQz1rRtK" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ11UpS8qkUJMeWmjWv5cMtfzh9xPE50g17UtvpRVgKSWMwML" crossorigin="anonymous"></script>
-    
-    <!-- html2pdf.js for generating PDFs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5xGLnLDbabClq/95wLQg15qGo5W23V50NqbNqW1s3JHODfvHs77UyYYbTspRZ+fGq4TJDTE1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Bundled Libraries (local — works fully offline) -->
+    <script src="vendor/js/dompurify.min.js"></script>
+    <script src="vendor/js/marked.min.js"></script>
+    <script src="vendor/js/highlight.min.js"></script>
+    <script src="vendor/js/katex.min.js"></script>
+    <script src="vendor/js/katex-auto-render.min.js"></script>
+    <script src="vendor/js/html2pdf.bundle.min.js"></script>
 
     <!-- Main Application JavaScript -->
     <script src="app.js"></script>

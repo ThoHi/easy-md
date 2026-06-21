@@ -1004,8 +1004,9 @@ Object.entries(toolbarBindings).forEach(([btnId, formatType]) => {
 
 // --- PWA: Service Worker registration & install prompt ---
 function setupPWA() {
-    // Register the service worker for offline support
-    if ('serviceWorker' in navigator) {
+    // Register the service worker for offline support (web only — skip on file://,
+    // e.g. inside the packaged Electron app, where assets are already local).
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').catch((err) => {
                 console.warn('Service worker registration failed:', err);

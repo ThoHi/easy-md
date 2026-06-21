@@ -73,6 +73,31 @@ Once installed, it runs in its own window with a Start-menu / home-screen icon. 
 
 ---
 
+## Desktop App (Windows)
+
+EasyMD also ships as a native Windows desktop app via [Electron](https://www.electronjs.org/). All libraries and fonts are bundled into `vendor/`, so the desktop app runs **completely offline** with no CDN or server.
+
+### Run in development
+
+```bash
+npm install
+npm start
+```
+
+### Build the Windows installer
+
+```bash
+npm run dist
+```
+
+This produces an NSIS installer at `dist/EasyMD Setup <version>.exe` (and an unpacked build in `dist/win-unpacked/`). The installer lets you choose the install location and creates Start-menu and desktop shortcuts.
+
+> **Note:** The build is unsigned, so Windows SmartScreen may show a "Windows protected your PC" prompt on first run — click **More info → Run anyway**. To remove this, sign the executable with a code-signing certificate.
+>
+> **First build on Windows:** electron-builder downloads a `winCodeSign` helper that contains macOS symlinks Windows can't extract without Developer Mode or admin rights. If the build fails on `Cannot create symbolic link`, enable **Windows Developer Mode** (Settings → Privacy & security → For developers) and rebuild.
+
+---
+
 ## Tech Stack
 
 | Library | Purpose |
@@ -88,14 +113,18 @@ Once installed, it runs in its own window with a Start-menu / home-screen icon. 
 ## Project Structure
 
 ```
-index.html             # App markup and CDN library links
+index.html             # App markup, references bundled local libraries
 styles.css             # Themes, layout, and the drag-to-read overlay
 app.js                 # Editor logic, file drop, export, PWA registration
 manifest.webmanifest   # PWA metadata (name, icons, colors, display)
-sw.js                  # Service worker — offline app shell + CDN caching
+sw.js                  # Service worker — offline app shell caching (web)
 icon.svg               # Scalable app icon / favicon
 icon-192.png           # Maskable icon (192×192)
 icon-512.png           # Maskable icon (512×512)
+vendor/                # Bundled libraries & fonts (offline; no CDN)
+electron-main.js       # Electron main process (desktop app)
+package.json           # npm scripts + electron-builder config
+build/icon.ico         # Windows app icon for the installer
 ```
 
 ---
