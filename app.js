@@ -116,6 +116,7 @@ const closeCheatsheetModal = document.getElementById('closeCheatsheetModal');
 const closeImportModal = document.getElementById('closeImportModal');
 const importArea = document.getElementById('importArea');
 const fileInput = document.getElementById('fileInput');
+const dropOverlay = document.getElementById('dropOverlay');
 
 // Scroll Sync State
 let isSyncingEditorScroll = false;
@@ -714,7 +715,7 @@ function exportAsPDF() {
     });
 }
 
-function handleFileUpload(file) {
+function handleFileUpload(file, readMode = false) {
     if (!file) return;
 
     // Validate file type — enforce .md, .txt, .markdown regardless of how the file was provided
@@ -731,8 +732,23 @@ function handleFileUpload(file) {
         const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
         createNewDocument(nameWithoutExt, content);
         closeModal(importModal);
+        // When a file is dropped onto the window, jump straight into clean reading mode
+        if (readMode) setViewMode('preview');
     };
     reader.readAsText(file);
+}
+
+// Load one or more dropped files. The last valid file is opened in reading mode.
+function handleDroppedFiles(fileList, readMode = false) {
+    const files = Array.from(fileList).filter(f => /\.(md|txt|markdown)$/i.test(f.name));
+    if (files.length === 0) {
+        alert('Only .md, .txt, and .markdown files are supported.');
+        return;
+    }
+    // Load earlier files quietly, then open the last one in reading mode
+    files.forEach((file, index) => {
+        handleFileUpload(file, readMode && index === files.length - 1);
+    });
 }
 
 // --- Event Listeners Setup ---
@@ -876,10 +892,47 @@ function setupEventListeners() {
 
     importArea.addEventListener('drop', (e) => {
         e.preventDefault();
+        e.stopPropagation(); // let the modal handle its own drop; don't double-load via window
         importArea.classList.remove('dragover');
+        dropOverlay.classList.remove('show');
         if (e.dataTransfer.files.length > 0) {
             handleFileUpload(e.dataTransfer.files[0]);
         }
+    });
+
+    // Full-window Drag & Drop — drop a .md file anywhere on the page to read it.
+    // Use a counter so the overlay doesn't flicker when dragging over child elements.
+    let dragDepth = 0;
+    const isFileDrag = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+
+    window.addEventListener('dragenter', (e) => {
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        dragDepth++;
+        dropOverlay.classList.add('show');
+    });
+
+    window.addEventListener('dragover', (e) => {
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+    });
+
+    window.addEventListener('dragleave', (e) => {
+        if (!isFileDrag(e)) return;
+        dragDepth--;
+        if (dragDepth <= 0) {
+            dragDepth = 0;
+            dropOverlay.classList.remove('show');
+        }
+    });
+
+    window.addEventListener('drop', (e) => {
+        dragDepth = 0;
+        dropOverlay.classList.remove('show');
+        if (!e.dataTransfer || e.dataTransfer.files.length === 0) return;
+        e.preventDefault();
+        handleDroppedFiles(e.dataTransfer.files, true);
     });
 }
 
@@ -949,5 +1002,43 @@ Object.entries(toolbarBindings).forEach(([btnId, formatType]) => {
     }
 });
 
+// --- PWA: Service Worker registration & install prompt ---
+function setupPWA() {
+    // Register the service worker for offline support
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').catch((err) => {
+                console.warn('Service worker registration failed:', err);
+            });
+        });
+    }
+
+    // Custom install button (shown only when the browser offers installation)
+    const btnInstall = document.getElementById('btnInstall');
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (btnInstall) btnInstall.style.display = 'flex';
+    });
+
+    if (btnInstall) {
+        btnInstall.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            btnInstall.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (btnInstall) btnInstall.style.display = 'none';
+    });
+}
+
 // Run Init
 window.addEventListener('DOMContentLoaded', init);
+setupPWA();

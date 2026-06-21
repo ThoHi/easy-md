@@ -12,6 +12,14 @@
     <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'none'">
     
+    <!-- PWA: manifest & icons -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EasyMD">
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     
@@ -29,6 +37,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
+
+    <!-- Full-window Drop Overlay (drag a .md file anywhere to read it) -->
+    <div class="drop-overlay" id="dropOverlay">
+        <div class="drop-overlay-inner">
+            <i class="fa-solid fa-cloud-arrow-down drop-overlay-icon"></i>
+            <p class="drop-overlay-title">Drop to read</p>
+            <p class="drop-overlay-sub">Release your <strong>.md</strong>, <strong>.markdown</strong> or <strong>.txt</strong> file anywhere</p>
+        </div>
+    </div>
 
     <div class="app-container" id="appContainer">
         <!-- 1. SIDEBAR -->
@@ -60,6 +77,9 @@
                 </button>
                 <button class="cheatsheet-toggle" id="btnImport">
                     <i class="fa-solid fa-file-import"></i> Import File
+                </button>
+                <button class="cheatsheet-toggle" id="btnInstall" style="display: none;">
+                    <i class="fa-solid fa-download"></i> Install App
                 </button>
             </div>
         </aside>
