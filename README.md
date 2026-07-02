@@ -73,9 +73,9 @@ Once installed, it runs in its own window with a Start-menu / home-screen icon. 
 
 ---
 
-## Desktop App (Windows)
+## Desktop App (Windows & macOS)
 
-EasyMD also ships as a native Windows desktop app via [Electron](https://www.electronjs.org/). All libraries and fonts are bundled into `vendor/`, so the desktop app runs **completely offline** with no CDN or server.
+EasyMD also ships as a native desktop app via [Electron](https://www.electronjs.org/). All libraries and fonts are bundled into `vendor/`, so the desktop app runs **completely offline** with no CDN or server.
 
 ### Run in development
 
@@ -95,6 +95,27 @@ This produces an NSIS installer at `dist/EasyMD Setup <version>.exe` (and an unp
 > **Note:** The build is unsigned, so Windows SmartScreen may show a "Windows protected your PC" prompt on first run — click **More info → Run anyway**. To remove this, sign the executable with a code-signing certificate.
 >
 > **First build on Windows:** electron-builder downloads a `winCodeSign` helper that contains macOS symlinks Windows can't extract without Developer Mode or admin rights. If the build fails on `Cannot create symbolic link`, enable **Windows Developer Mode** (Settings → Privacy & security → For developers) and rebuild.
+
+### Build the macOS app
+
+> macOS builds must be run on a Mac.
+
+```bash
+npm run dist:mac
+```
+
+This produces a **universal** disk image at `dist/EasyMD-<version>-universal.dmg` that runs natively on both Apple Silicon and Intel Macs (plus the app bundle at `dist/mac-universal/EasyMD.app`). Open the `.dmg` and drag **EasyMD** into your Applications folder.
+
+To build for a single architecture instead (smaller download), pass an arch flag:
+
+```bash
+npx electron-builder --mac dmg --arm64   # Apple Silicon only
+npx electron-builder --mac dmg --x64     # Intel only
+```
+
+The Mac app icon is `build/icon.icns`. If you replace `icon-512.png`, regenerate the `.icns` with macOS's `iconutil` (or `sips`) before rebuilding.
+
+> **Note:** The build is unsigned. On first launch, macOS Gatekeeper will warn that the app is from an unidentified developer — **right-click the app → Open**, or run `xattr -cr /Applications/EasyMD.app` to clear the quarantine flag. To remove this permanently, sign and notarize the app with an Apple Developer ID certificate.
 
 ---
 
@@ -125,6 +146,7 @@ vendor/                # Bundled libraries & fonts (offline; no CDN)
 electron-main.js       # Electron main process (desktop app)
 package.json           # npm scripts + electron-builder config
 build/icon.ico         # Windows app icon for the installer
+build/icon.icns        # macOS app icon for the .dmg / .app
 ```
 
 ---
