@@ -77,6 +77,18 @@ Once installed, it runs in its own window with a Start-menu / home-screen icon. 
 
 EasyMD also ships as a native desktop app via [Electron](https://www.electronjs.org/). All libraries and fonts are bundled into `vendor/`, so the desktop app runs **completely offline** with no CDN or server.
 
+### Download
+
+Grab a prebuilt binary from the [latest release](https://github.com/ThoHi/easy-md/releases/latest):
+
+| Platform | Download |
+|----------|----------|
+| **macOS** (Intel + Apple Silicon) | [EasyMD-1.0.2-universal.dmg](https://github.com/ThoHi/easy-md/releases/download/v1.0.2/EasyMD-1.0.2-universal.dmg) |
+| **macOS** (Apple Silicon only, smaller) | [EasyMD-1.0.2-arm64.dmg](https://github.com/ThoHi/easy-md/releases/download/v1.0.2/EasyMD-1.0.2-arm64.dmg) |
+| **Windows** | [EasyMD-Setup-1.0.1.exe](https://github.com/ThoHi/easy-md/releases/download/v1.0.1/EasyMD-Setup-1.0.1.exe) |
+
+On macOS, open the `.dmg` and drag **EasyMD** into your Applications folder. The Mac app is unsigned, so on first launch right-click it → **Open** (or run `xattr -cr /Applications/EasyMD.app`) to clear the Gatekeeper quarantine.
+
 ### Run in development
 
 ```bash
